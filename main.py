@@ -43,15 +43,18 @@ def main():
             myquery['username'] = { '$eq' : d['username']}
 
             user = users.find(myquery)
-            for i in user:
+            x = list(user)
+            if len(x) == 0:
+                    print('Incorrect Username/Password.')
+                    continue
+            for i in x:
                 if i['username'] == d['username']:
                     key = hashlib.pbkdf2_hmac('sha256', d['password'].encode('utf-8'), bytes.fromhex(i['salt']), 100000)
-
                     if key.hex() == i['hash']:
                         print('Logged In')
-                        print(i)
                     else:
-                        print('Incorrect Passwrd.')
+                        print('Incorrect Username/Password.')
+                    
 
         elif query.lower() == 'r':
             d = dict()
@@ -63,7 +66,6 @@ def main():
             
             user = users.find(myquery)
             for i in user:
-                print(i)
                 if i['username'] == d['username']:
                     print('Account name already exists. Please choose a unique name!')
                     flag = True
