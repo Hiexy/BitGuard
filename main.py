@@ -32,10 +32,11 @@ def main():
         query = input("> ")
         
         if query.lower() == 'l':
-            login(users)
+            ans = login(users)
+            print(ans)
                     
         elif query.lower() == 'r':
-            register(users)
+            print(register(users))
 
         elif query.lower() == 'd':
             users.delete_many({})
