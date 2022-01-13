@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
-from modules.auth_mech import login, register
-from modules.db_connect import connectcol
+from packages.auth_mech import login, register
+from packages.db_connect import connectcol
 
 banner = '''
 ██████╗ ██╗████████╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ 
