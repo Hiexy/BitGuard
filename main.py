@@ -20,7 +20,6 @@ def main():
     print('\n' * 5)
 
     users = connectcol('users')
-
     while True:
         print('\n' * 5)
         print('Choose one of the following options:')
