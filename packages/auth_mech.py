@@ -28,8 +28,7 @@ def register(users):
     salt = os.urandom(32)
     key = hashlib.pbkdf2_hmac('sha256', password1.encode('utf-8'), salt, 100000)
 
-    d['salt'] = salt.hex()
-    d['hash'] = key.hex()
+    d['token'] = salt.hex() + key.hex()
     
     users.insert_one(d)
     return 'Account successfully created.'
@@ -49,8 +48,8 @@ def login(users):
 
     for i in x:
         if i['username'] == d['username']:
-            key = hashlib.pbkdf2_hmac('sha256', d['password'].encode('utf-8'), bytes.fromhex(i['salt']), 100000)
-            if key.hex() == i['hash']:
+            key = hashlib.pbkdf2_hmac('sha256', d['password'].encode('utf-8'), bytes.fromhex(i['token'][:64]), 100000)
+            if key.hex() == i['token'][64:]:
                 return 'Logged In'
             else:
                 return 'Incorrect Username/Password.'
