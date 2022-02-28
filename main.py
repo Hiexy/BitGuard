@@ -1,7 +1,9 @@
 #! /usr/bin/python3
 
+import bson
 from packages.auth_mech import login, register
 from packages.db_connect import connectcol
+from packages.vault_mech import vault
 
 banner = '''
 ██████╗ ██╗████████╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ 
@@ -31,8 +33,11 @@ def main():
         query = input("> ")
         
         if query.lower() == 'l':
-            ans = login(users)
-            print(ans)
+            id, masterKey = login(users)
+            if masterKey:
+                vault(users, id, masterKey)
+            else:
+                print(id)
                     
         elif query.lower() == 'r':
             print(register(users))
