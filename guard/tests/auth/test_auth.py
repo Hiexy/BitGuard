@@ -13,8 +13,6 @@ from guard.database.connect import connect_col
 
 @pytest.fixture
 def col():
-    os.system('sudo systemctl start mongod')
-    time.sleep(3)
     return connect_col('test')
 
 def test_register_used_username(col):
