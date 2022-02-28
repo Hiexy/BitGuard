@@ -1,9 +1,7 @@
 #! /usr/bin/python3
 
 import bson
-from packages.auth_mech import login, register
-from packages.db_connect import connectcol
-from packages.vault_mech import vault
+from guard.guard import Guard
 
 banner = '''
 ██████╗ ██╗████████╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ 
@@ -21,7 +19,7 @@ def main():
     print('Welcome To BitGuard')
     print('\n' * 5)
 
-    users = connectcol('users')
+    guard = Guard()
     while True:
         print('\n' * 5)
         print('Choose one of the following options:')
@@ -33,20 +31,30 @@ def main():
         query = input("> ")
         
         if query.lower() == 'l':
-            id, masterKey = login(users)
-            if masterKey:
-                vault(users, id, masterKey)
-            else:
-                print(id)
+            try:
+                id, masterKey = guard.login()
+                print(id, masterKey)
+                # if masterKey:
+                #     vault(users, id, masterKey)
+                # else:
+                #     print(id)
+            except Exception as e:
+                print(f'Error: {e}')
                     
         elif query.lower() == 'r':
-            print(register(users))
+            try:
+                print(guard.register())
+            except Exception as e:
+                print(f'Error: {e}')
 
         elif query.lower() == 'd':
-            users.delete_many({})
-
+            try:
+                guard.delete_all()
+            except Exception as e:
+                print(f'Error: {e}')
+            
         elif query.lower() == 'v':
-            for x in users.find():
+            for x in guard.col.find():
                 print(x)
 
         elif query.lower() == 'q':

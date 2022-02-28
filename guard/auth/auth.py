@@ -1,14 +1,13 @@
 #!/usr/bin/python3
 
-from getpass import getpass
 import os
 import hashlib
 
-def register(users):
+def register(users, username, password1, password2):
     d = dict()
     myquery = dict()
     flag = False
-    d['username'] = input('Enter username: ').lower()
+    d['username'] = username
 
     myquery['username'] = { '$eq' : d['username']}
     
@@ -17,12 +16,10 @@ def register(users):
         if i['username'] == d['username']:
             flag = True
     if flag:
-        return 'Account name already exists. Please choose a unique name!'
+        raise Exception('Account name already exists. Please choose a unique name!')
 
-    password1 = getpass('Enter password: ')
-    password2 = getpass('Confirm password: ')
     if password1 != password2:
-        return 'Passwords do not match'
+        raise Exception('Passwords do not match')
         
     
     salt = os.urandom(32)
@@ -34,18 +31,18 @@ def register(users):
     users.insert_one(d)
     return 'Account successfully created.'
 
-def login(users):
+def login(users, username, password):
     d = dict()
     myquery = dict()
-    d['username'] = input('Enter username: ').lower()
-    d['password'] = getpass('Enter password: ')
+    d['username'] = username
+    d['password'] = password
 
     myquery['username'] = { '$eq' : d['username']}
 
     user = users.find(myquery)
     x = list(user)
     if len(x) == 0:
-        return 'Incorrect Username/Password.', None
+        raise Exception('Incorrect Username/Password.')
 
     for i in x:
         if i['username'] == d['username']:
@@ -54,4 +51,4 @@ def login(users):
                 print('Logged In')
                 return i['_id'], d['password']
             else:
-                return 'Incorrect Username/Password.', None
+                raise Exception('Incorrect Username/Password.')
