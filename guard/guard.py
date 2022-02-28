@@ -2,6 +2,7 @@ from getpass import getpass
 
 from guard.database.connect import connect_col
 from guard.auth.auth import register, login
+from guard.vault.vault import Vault
 
 class Guard():
     def __init__(self):
@@ -21,6 +22,8 @@ class Guard():
     def delete_all(self):
         self.col.delete_many({})
 
+    def init_vault(self, id, password):
+        self.vault = Vault(self.col, id, password)
 
 def main():
     guard = Guard()
