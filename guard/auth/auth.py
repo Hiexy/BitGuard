@@ -2,6 +2,7 @@
 
 import os
 import hashlib
+import json
 
 def register(users, username, password1, password2):
     d = dict()
@@ -27,7 +28,7 @@ def register(users, username, password1, password2):
 
     d['token'] = salt.hex() + key.hex()
     d['salt'] = os.urandom(32).hex()
-
+    d['vault'] = dict()
     users.insert_one(d)
     return 'Account successfully created.'
 

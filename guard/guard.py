@@ -20,8 +20,6 @@ class Guard():
         id, masterKey = login(self.col, username, password)
         self.vault = Vault(self.col, id, masterKey)
         return id, masterKey
-    def delete_all(self):
-        self.col.delete_many({})
 
 
 def interface():
@@ -35,15 +33,12 @@ def interface():
         print('Choose one of the following options:')
         print('[L]ogin')
         print('[R]egister a new account')
-        print('[D]elete all accounts.')
-        print('[V]iew all acounts.')
         print('[Q]uit.')
         query = input("> ")
         
         if query.lower() == 'l':
             try:
                 id, masterKey = guard.login()
-                print(id, masterKey)
                 if masterKey:
                     vault_interface(guard)
                 else:
@@ -56,16 +51,6 @@ def interface():
                 print(guard.register())
             except Exception as e:
                 print(f'Error: {e}')
-
-        elif query.lower() == 'd':
-            try:
-                guard.delete_all()
-            except Exception as e:
-                print(f'Error: {e}')
-            
-        elif query.lower() == 'v':
-            for x in guard.col.find():
-                print(x)
 
         elif query.lower() == 'q':
             exit()
