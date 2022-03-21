@@ -23,7 +23,7 @@ def register(users, username, password1, password2):
         
     
     salt = os.urandom(32)
-    key = hashlib.pbkdf2_hmac('sha256', password1.encode('utf-8'), salt, 100000)
+    key = hashlib.pbkdf2_hmac('sha256', password1.encode('utf-8'), salt, 1000000)
 
     d['token'] = salt.hex() + key.hex()
     d['salt'] = os.urandom(32).hex()
@@ -46,7 +46,7 @@ def login(users, username, password):
 
     for i in x:
         if i['username'] == d['username']:
-            key = hashlib.pbkdf2_hmac('sha256', d['password'].encode('utf-8'), bytes.fromhex(i['token'][:64]), 100000)
+            key = hashlib.pbkdf2_hmac('sha256', d['password'].encode('utf-8'), bytes.fromhex(i['token'][:64]), 1000000)
             if key.hex() == i['token'][64:]:
                 print('Logged In')
                 return i['_id'], d['password']
