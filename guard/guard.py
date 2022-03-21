@@ -19,7 +19,7 @@ class Guard():
         password = getpass('Enter password: ')
         id, masterKey = login(self.col, username, password)
         self.vault = Vault(self.col, id, masterKey)
-    
+        return id, masterKey
     def delete_all(self):
         self.col.delete_many({})
 
@@ -45,7 +45,6 @@ def interface():
                 id, masterKey = guard.login()
                 print(id, masterKey)
                 if masterKey:
-                    guard.init_vault(guard.col, id, masterKey)
                     vault_interface(guard)
                 else:
                     print(id)
